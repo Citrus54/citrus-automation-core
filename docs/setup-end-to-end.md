@@ -2,9 +2,8 @@
 
 This guide shows how to rebuild the **entire NFC → iPhone → Raspberry Pi → Windows PC** automation from scratch.
 
-It’s written so that:
-- Future-you can follow it step by step.
-- A hiring manager can see clearly what you actually did.
+It’s written so that you can follow it step by step.
+
 
 ---
 
