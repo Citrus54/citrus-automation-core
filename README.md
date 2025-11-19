@@ -62,3 +62,78 @@ citrus-automation-core/
 │
 └── scripts/
     └── productivity.ps1           # PowerShell script for PC productivity routine
+
+```
+## Architecture
+
+High-level flow (details in docs/architecture.md
+):
+
+[NFC Tag tapped on iPhone]
+          ↓
+[iOS Shortcut: POST /trigger/productivity → Pi]
+          ↓
+[Raspberry Pi Node-RED: validates + forwards → /pc/productivity]
+          ↓
+[Windows Node-RED: runs PowerShell → opens apps]
+
+## Rebuilding this system
+
+A full, linear “from nothing to working NFC tag” guide is in:
+
+docs/setup-end-to-end.md
+
+Use that if you want to recreate the setup later.
+
+## Current demo behavior
+
+Tap Productivity NFC tag on iPhone.
+
+Shortcut sends POST /trigger/productivity to the Pi.
+
+Pi Node-RED:
+
+Logs trigger.
+
+Calls POST /pc/productivity on the Windows PC.
+
+Returns 200 OK quickly to the iPhone (avoids timeout).
+
+PC Node-RED:
+
+Uses exec node to run PowerShell.
+
+PowerShell launches DuckDuckGo.
+
+Returns {"status": "ok"} JSON.
+
+Both Node-RED instances run as background services:
+
+Pi: systemd service (nodered.service)
+
+PC: NSSM service (NodeRED)
+
+## Future plans
+
+Tracked in docs/future-work.md
+:
+
+Full “Productivity Mode v2”:
+
+Browser + tabs
+
+Notes / editor
+
+Music
+
+Additional NFC modes:
+
+Gaming
+
+Streaming
+
+Sleep
+
+Wake-on-LAN from Pi to PC.
+
+Integrate lights / smart plugs via Pi Node-RED.
