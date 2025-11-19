@@ -1,0 +1,16 @@
+# Logs
+logs/
+*.log
+
+# Node-RED runtime noise (if ever synced)
+node_modules/
+*.backup
+*.bak
+*.tmp
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Shortcut cloud link exports
+*.icloud
