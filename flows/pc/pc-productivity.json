@@ -1,0 +1,80 @@
+[
+    {
+        "id": "086e3b6fe0d0416b",
+        "type": "http in",
+        "z": "4222caf194111e0c",
+        "name": "PC Producitivity (POST)",
+        "url": "/pc/productivity",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 60,
+        "wires": [
+            [
+                "f672b4455c04dac3"
+            ]
+        ]
+    },
+    {
+        "id": "f672b4455c04dac3",
+        "type": "exec",
+        "z": "4222caf194111e0c",
+        "command": "powershell.exe -Command \"Start-Process 'C:\\Users\\Curtis\\AppData\\Local\\Microsoft\\WindowsApps\\DuckDuckGo.exe' \"",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Launch DuckDuckGo",
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [],
+            [
+                "65a030f2092724e6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "65a030f2092724e6",
+        "type": "change",
+        "z": "4222caf194111e0c",
+        "name": "set msg.payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"status\":\"ok\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 240,
+        "wires": [
+            [
+                "faabcfa6772cbffe"
+            ]
+        ]
+    },
+    {
+        "id": "faabcfa6772cbffe",
+        "type": "http response",
+        "z": "4222caf194111e0c",
+        "name": "http (200)",
+        "statusCode": "200",
+        "headers": {},
+        "x": 260,
+        "y": 340,
+        "wires": []
+    }
+]
