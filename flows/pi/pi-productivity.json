@@ -1,0 +1,119 @@
+[
+    {
+        "id": "406da3bb6e3545db",
+        "type": "http in",
+        "z": "539985bf9fefc812",
+        "name": "Productivity Trigger (POST)",
+        "url": "/trigger/productivity",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 240,
+        "y": 40,
+        "wires": [
+            [
+                "7ecd4ec0dcb30495"
+            ]
+        ]
+    },
+    {
+        "id": "7ecd4ec0dcb30495",
+        "type": "function",
+        "z": "539985bf9fefc812",
+        "name": "Validate + Build Payload",
+        "func": "// Accept empty body from iOS Shortcuts\nlet sourceIP = msg.req.ip || \"unknown\";\n\n// Log the trigger\nnode.warn(\"Productivity trigger from \" + sourceIP);\n\n// Normalize the body so it's never undefined\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    msg.payload = {};\n}\n\n// Optional: add anything you want into the payload\nmsg.payload.trigger = \"productivity\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 210,
+        "y": 100,
+        "wires": [
+            [
+                "754113a698835a6d",
+                "fa4883a79eee8472",
+                "2fd176fee6f0fac4"
+            ]
+        ]
+    },
+    {
+        "id": "754113a698835a6d",
+        "type": "http request",
+        "z": "539985bf9fefc812",
+        "name": "Send to PC",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://192.168.1.159:1880/pc/productivity",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 190,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8c7346c4f29a2f8a",
+        "type": "http response",
+        "z": "539985bf9fefc812",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 480,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "fa4883a79eee8472",
+        "type": "debug",
+        "z": "539985bf9fefc812",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "2fd176fee6f0fac4",
+        "type": "change",
+        "z": "539985bf9fefc812",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"status\":\"ok\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 180,
+        "wires": [
+            [
+                "8c7346c4f29a2f8a"
+            ]
+        ]
+    }
+]
