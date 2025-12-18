@@ -38,6 +38,7 @@ Launches Discord
 Logs execution and verifies post-launch processes
 
 ## High-Level Flow
+```
 [NFC tag tapped on iPhone]
         ↓
 [iOS Shortcut: HTTP POST → Raspberry Pi]
@@ -47,7 +48,7 @@ Logs execution and verifies post-launch processes
 [Windows Node-RED: exec PowerShell]
         ↓
 [PC launches mode-specific apps]
-
+```
 
 No public internet exposure
 
@@ -110,6 +111,7 @@ How to rebuild it from scratch
 How to extend it safely
 
 ## Repo Layout
+```
 citrus-automation-core/
 │
 ├── README.md
@@ -138,7 +140,7 @@ citrus-automation-core/
 └── scripts/
     ├── productivity.ps1
     └── gaming.ps1
-
+```
 ## Architecture Notes
 
 ### aspberry Pi
