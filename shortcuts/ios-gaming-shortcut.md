@@ -60,11 +60,12 @@ Tap Add Action
 Add action: Get Contents of URL
 
 Configure the action:
+| Setting | Value |
+|--------|-------|
+| URL | `http://<PI_IP>:1880/trigger/gaming` |
+| Method | `POST` |
+| Request Body | None |
 
-Setting	Value
-URL	http://<PI_IP>:1880/trigger/gaming
-Method	POST
-Request Body	None
 
 Tap Next
 
