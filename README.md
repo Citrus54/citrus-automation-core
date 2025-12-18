@@ -1,139 +1,240 @@
 # Citrus Automation Core
 
-**Citrus Automation Core** is a local, NFC-powered automation system that connects:
+Citrus Automation Core is a fully local, NFC-triggered automation system that lets a phone trigger different computer “modes” (Productivity, Gaming, etc.) without cloud services, voice assistants, or exposed ports.
 
-- **iPhone + NFC tags**
-- **Raspberry Pi (Node-RED)**
-- **Windows PC (Node-RED + PowerShell)**
+### Core stack:
 
-Core demo:
+iPhone + NFC tags (iOS Shortcuts)
 
-> Tap an NFC tag → iPhone Shortcut calls the Pi →  
-> Pi calls the PC → PC opens a “Productivity” routine (currently DuckDuckGo).
+Raspberry Pi 4 (Node-RED orchestrator)
 
-No exposed internet ports. All traffic stays on LAN / Tailscale.
+Windows PC (Node-RED + PowerShell automation)
 
----
+LAN + Tailscale for secure private networking
 
-## What this project demonstrates
+One tap → one mode → instant environment change.
 
-For employers and for my future self, this repo shows:
+## Core Demos
+### Productivity Mode
 
-- I can:
-  - Configure a Raspberry Pi, SSH, and systemd services.
-  - Install and run Node-RED on **both** Linux and Windows.
-  - Use **NSSM** to run Node-RED as a Windows service.
-  - Build HTTP-based automation between devices.
-  - Use iOS Shortcuts + NFC tags to trigger automations.
-- I can design:
-  - A small distributed system (Phone → Pi → PC).
-  - Clean separation of roles:
-    - Phone = trigger / UX
-    - Pi = orchestrator
-    - PC = automation agent
-- I can document:
-  - How to rebuild everything step-by-step.
-  - How it works internally, for someone reading the repo cold.
+Tap a Productivity NFC tag → PC launches a focused work environment.
 
----
+Current behavior:
 
-## Repo layout
+Opens DuckDuckGo (expandable to tabs, tools, notes, music)
 
-```text
+### Gaming Mode
+
+Tap a Gaming NFC tag → PC switches into a gaming-ready state.
+
+Current behavior:
+
+Closes work apps (example: Notepad)
+
+Launches Steam
+
+Launches Discord
+
+Logs execution and verifies post-launch processes
+
+## High-Level Flow
+[NFC tag tapped on iPhone]
+        ↓
+[iOS Shortcut: HTTP POST → Raspberry Pi]
+        ↓
+[Pi Node-RED: validate + route]
+        ↓
+[Windows Node-RED: exec PowerShell]
+        ↓
+[PC launches mode-specific apps]
+
+
+No public internet exposure
+
+No cloud automation platforms
+
+All traffic stays on LAN / Tailscale
+
+iPhone receives fast 200 OK responses to avoid shortcut timeouts
+
+## What This Project Demonstrates
+
+This repo exists for employers and future me.
+
+### I can build and operate:
+
+Raspberry Pi systems (SSH, services, networking)
+
+Node-RED on Linux and Windows
+
+Windows services using NSSM
+
+HTTP-based automation between devices
+
+Secure private networking with Tailscale
+
+OS-level automation with PowerShell
+
+NFC-triggered workflows via iOS Shortcuts
+
+### I can design:
+
+A small distributed system:
+
+Phone = trigger / UX
+
+Pi = orchestration layer
+
+PC = automation agent
+
+Clear separation of responsibilities
+
+Extensible “mode-based” automation (Productivity, Gaming, etc.)
+
+### I can troubleshoot:
+
+Cross-device communication issues
+
+Script execution failures
+
+Environment differences between manual vs service execution
+
+Logging, validation, and recovery paths
+
+### I can document:
+
+How the system works end-to-end
+
+How to rebuild it from scratch
+
+How to extend it safely
+
+## Repo Layout
 citrus-automation-core/
 │
-├── README.md                      # Overview (this file)
-├── .gitignore                     # Ignore logs and junk
+├── README.md
+├── .gitignore
 │
 ├── docs/
-│   ├── architecture.md            # High-level system architecture
-│   ├── setup-end-to-end.md        # Step-by-step setup from scratch
-│   ├── future-work.md             # Planned improvements
+│   ├── architecture.md
+│   ├── setup-end-to-end.md
+│   ├── future-work.md
 │
 ├── flows/
 │   ├── pi/
-│   │   └── productivity.json      # Exported Pi Node-RED flow
+│   │   ├── productivity.json
+│   │   └── gaming.json
+│   │
 │   └── pc/
-│       └── productivity.json      # Exported PC Node-RED flow
+│       ├── productivity.json
+│       └── gaming.json
 │
 ├── shortcuts/
-│   ├── Productivity Tag.shortcut          # Exported iOS Shortcut (binary)
-│   └── ios-productivity-shortcut.md       # Human-readable Shortcut description
+│   ├── Productivity Tag.shortcut
+│   ├── Gaming Tag.shortcut
+│   ├── ios-productivity-shortcut.md
+│   └── ios-gaming-shortcut.md
 │
 └── scripts/
-    └── productivity.ps1           # PowerShell script for PC productivity routine
+    ├── productivity.ps1
+    └── gaming.ps1
 
-```
-## Architecture
+## Architecture Notes
 
-High-level flow (details in docs/architecture.md
-):
+### aspberry Pi
 
-[NFC Tag tapped on iPhone]
-          ↓
-[iOS Shortcut: POST /trigger/productivity → Pi]
-          ↓
-[Raspberry Pi Node-RED: validates + forwards → /pc/productivity]
-          ↓
-[Windows Node-RED: runs PowerShell → opens apps]
+Runs Node-RED as a systemd service
 
-## Rebuilding this system
+Receives NFC-triggered HTTP requests
 
-A full, linear “from nothing to working NFC tag” guide is in:
+Performs validation and routing
+
+Forwards requests to PC over Tailscale
+
+### Windows PC
+
+Runs Node-RED as a Windows service via NSSM
+
+Uses exec nodes to call PowerShell scripts
+
+PowerShell handles all OS-level logic
+
+Writes detailed logs for troubleshooting
+
+## Current Mode Behavior
+### Productivity Mode
+
+NFC tag tapped
+
+iOS Shortcut sends POST /trigger/productivity
+
+Pi Node-RED logs + forwards request
+
+PC Node-RED runs productivity.ps1
+
+Productivity apps launch
+
+JSON { "status": "ok" } returned
+
+### Gaming Mode
+
+NFC tag tapped
+
+iOS Shortcut sends POST /trigger/gaming
+
+Pi Node-RED logs + forwards request
+
+PC Node-RED runs gaming.ps1
+
+Work apps closed
+
+Steam and Discord launched
+
+Post-launch verification logged
+
+JSON { "status": "ok" } returned
+
+## Rebuilding the System
+
+A full, linear rebuild guide is here:
 
 docs/setup-end-to-end.md
 
-Use that if you want to recreate the setup later.
 
-## Current demo behavior
+That guide covers:
 
-Tap Productivity NFC tag on iPhone.
+Pi setup
 
-Shortcut sends POST /trigger/productivity to the Pi.
+Node-RED installation
 
-Pi Node-RED:
+Windows service configuration
 
-Logs trigger.
+NFC shortcut creation
 
-Calls POST /pc/productivity on the Windows PC.
+End-to-end testing
 
-Returns 200 OK quickly to the iPhone (avoids timeout).
+## Future Work
 
-PC Node-RED:
+Tracked in docs/future-work.md, including:
 
-Uses exec node to run PowerShell.
+Productivity Mode v2:
 
-PowerShell launches DuckDuckGo.
-
-Returns {"status": "ok"} JSON.
-
-Both Node-RED instances run as background services:
-
-Pi: systemd service (nodered.service)
-
-PC: NSSM service (NodeRED)
-
-## Future plans
-
-Tracked in docs/future-work.md
-:
-
-Full “Productivity Mode v2”:
-
-Browser + tabs
+Multiple browser tabs
 
 Notes / editor
 
 Music
 
-Additional NFC modes:
-
-Gaming
+Additional modes:
 
 Streaming
 
 Sleep
 
-Wake-on-LAN from Pi to PC.
+Wake
 
-Integrate lights / smart plugs via Pi Node-RED.
+Wake-on-LAN from Pi → PC
+
+Smart lights / plugs via Pi Node-RED
+
+Centralized mode configuration
