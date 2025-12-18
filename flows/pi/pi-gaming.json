@@ -1,0 +1,127 @@
+[
+    {
+        "id": "caa1d84a791f3145",
+        "type": "tab",
+        "label": "Gaming",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ce2ea0ac16f2dbe4",
+        "type": "http in",
+        "z": "caa1d84a791f3145",
+        "name": "Productivity Gaming (POST)",
+        "url": "/trigger/gaming",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "3cfcd98c240aaa84"
+            ]
+        ]
+    },
+    {
+        "id": "3cfcd98c240aaa84",
+        "type": "function",
+        "z": "caa1d84a791f3145",
+        "name": "Validate + Build Payload",
+        "func": "msg.payload = {\n    trigger: \"gaming\",\n    timestamp: Date.now(),\n    source: msg.req?.ip || \"unknown\"\n};\n\nnode.warn(\"Gaming payload built: \" + JSON.stringify(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "42e8ba69b11f26ba",
+                "78db6e20118cbdc9",
+                "1ba2fd4bd15e25f4"
+            ]
+        ]
+    },
+    {
+        "id": "42e8ba69b11f26ba",
+        "type": "http request",
+        "z": "caa1d84a791f3145",
+        "name": "Send to PC",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://192.168.1.159:1880/pc/gaming",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 170,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "44a0a9af317db690",
+        "type": "http response",
+        "z": "caa1d84a791f3145",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 460,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "78db6e20118cbdc9",
+        "type": "debug",
+        "z": "caa1d84a791f3145",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "1ba2fd4bd15e25f4",
+        "type": "change",
+        "z": "caa1d84a791f3145",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"status\":\"ok\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 220,
+        "wires": [
+            [
+                "44a0a9af317db690"
+            ]
+        ]
+    }
+]
