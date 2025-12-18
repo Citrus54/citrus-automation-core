@@ -1,0 +1,133 @@
+[
+    {
+        "id": "b4b12fb9d3e475b6",
+        "type": "tab",
+        "label": "Gaming",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6b92b6ea3064362d",
+        "type": "http in",
+        "z": "b4b12fb9d3e475b6",
+        "name": "PC Gaming (POST)",
+        "url": "/pc/gaming",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "864bf5aebf8def13"
+            ]
+        ]
+    },
+    {
+        "id": "864bf5aebf8def13",
+        "type": "exec",
+        "z": "b4b12fb9d3e475b6",
+        "command": "powershell.exe -ExecutionPolicy Bypass -File \"C:\\NodeRED\\scripts\\gaming.ps1\"",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Launch Gaming",
+        "x": 260,
+        "y": 180,
+        "wires": [
+            [],
+            [
+                "d03e73783359a060",
+                "b5bd8a131635a098"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d03e73783359a060",
+        "type": "change",
+        "z": "b4b12fb9d3e475b6",
+        "name": "set msg.payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"status\":\"ok\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 280,
+        "wires": [
+            [
+                "8f604b6b2e503393"
+            ]
+        ]
+    },
+    {
+        "id": "8f604b6b2e503393",
+        "type": "http response",
+        "z": "b4b12fb9d3e475b6",
+        "name": "http (200)",
+        "statusCode": "200",
+        "headers": {},
+        "x": 320,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "b5bd8a131635a098",
+        "type": "debug",
+        "z": "b4b12fb9d3e475b6",
+        "name": "Gaming Exec Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "complete msg object",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f8c12a90fdd09ef6",
+        "type": "inject",
+        "z": "b4b12fb9d3e475b6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    }
+]
