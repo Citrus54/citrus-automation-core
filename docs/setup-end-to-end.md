@@ -109,7 +109,151 @@ SSH (Windows Terminal / PowerShell)
 
 Browser on Windows
 
-Admin access on Windows (for NSSM)
+## Admin access on Windows (for NSSM)
+. Connecting a Headless Raspberry Pi to the Internet (No Monitor / Keyboard)
+
+Use this before Section 3 if the Pi has no display.
+
+Option A (Preferred): Ethernet → Wi-Fi Setup via SSH
+
+This is the fastest and least error-prone.
+
+### 1 Connect via Ethernet
+
+Plug the Raspberry Pi into your router with an Ethernet cable.
+
+Power on the Pi.
+
+Wait ~60 seconds.
+
+### 2 SSH into the Pi
+
+On your Windows PC:
+
+ssh pi@raspberrypi.local
+
+
+If that fails, find the IP from your router and use:
+
+ssh pi@<PI_IP_ADDRESS>
+
+
+Login credentials:
+
+Username: pi
+
+Password: whatever you set (default used to be raspberry)
+
+Confirm:
+
+hostname
+
+
+Expected: raspberrypi
+
+### 3 Connect Pi to Wi-Fi
+
+Run:
+
+sudo raspi-config
+
+
+Navigate:
+
+System Options
+→ Wireless LAN
+→ Enter Wi-Fi SSID
+→ Enter Wi-Fi password
+
+
+Exit raspi-config.
+
+Restart networking or reboot:
+
+sudo reboot
+
+
+After reboot, unplug Ethernet.
+
+Reconnect via Wi-Fi:
+
+ssh pi@raspberrypi.local
+
+Option B: Wi-Fi Preconfiguration (SD Card Method)
+
+Use this before first boot.
+
+### 1 Prepare SD Card
+
+Insert the Raspberry Pi SD card into your PC.
+
+Open the boot partition.
+
+Create a file named:
+
+wpa_supplicant.conf
+
+
+Paste this (edit values):
+
+country=US
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+    ssid="YOUR_WIFI_NAME"
+    psk="YOUR_WIFI_PASSWORD"
+    key_mgmt=WPA-PSK
+}
+
+
+Save the file.
+
+Create an empty file named:
+
+ssh
+
+
+(no extension)
+
+Eject the SD card.
+
+### 3 Boot and Connect
+
+Insert SD card into Pi.
+
+Power it on.
+
+Wait ~1–2 minutes.
+
+SSH in:
+
+ssh pi@raspberrypi.local
+
+### 4 Verify Internet Connectivity
+
+On the Pi:
+
+ip a
+
+
+Confirm wlan0 has an IP.
+
+Test outbound access:
+
+ping -c 3 google.com
+
+
+If this works, the Pi is online and ready.
+
+0.5 Lock in Reliability (Recommended)
+
+Ensure Wi-Fi reconnects automatically:
+
+sudo systemctl enable dhcpcd
+sudo systemctl restart dhcpcd
+
+Optional but smart: assign the Pi a DHCP reservation in your router so its IP never changes.
 
 ##  Raspberry Pi – Node-RED setup
 ### 1 SSH into the Pi
