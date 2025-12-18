@@ -74,11 +74,12 @@ Toggle OFF Ask Before Running (recommended)
 Tap Done
 
 ## 🔹 Expected Behavior
-Step	Device	Behavior
-Tap NFC tag	iPhone	Shortcut fires
-Shortcut sends POST	Pi	Node-RED receives /trigger/gaming
-Pi forwards request	PC	Node-RED calls /pc/gaming
-PC executes script	Windows	Steam + Discord launch
+| Step |	Device	| Behavior |
+|------|--------|----------|
+| Tap NFC tag	| iPhone |	Shortcut fires |
+| Shortcut sends POST	| Pi |	Node-RED receives /trigger/gaming |
+| Pi forwards request |	PC	| Node-RED calls /pc/gaming |
+| PC executes script |	Windows	| Steam + Discord launch |
 ## 🔹 Exporting the Shortcut (for repo upload)
 
 Open Shortcuts → Shortcuts tab
