@@ -1,4 +1,4 @@
-iOS Shortcut – Gaming NFC Automation
+# iOS Shortcut – Gaming NFC Automation
 
 This document explains how the Gaming iPhone Shortcut works and how to recreate it from scratch.
 This Shortcut acts as the physical trigger in the automation pipeline:
@@ -7,7 +7,7 @@ NFC Tag → iPhone Shortcut → Raspberry Pi → Windows PC
 
 The shortcut sends an HTTP POST request to the Pi, which then forwards the command to the PC to activate Gaming Mode.
 
-🔹 Purpose
+## 🔹 Purpose
 
 Activate “Gaming Mode” by tapping an NFC tag with the iPhone.
 
@@ -27,17 +27,17 @@ Audio / lighting modes
 
 Focus / Do Not Disturb toggles
 
-🔹 Shortcut Trigger
+## 🔹 Shortcut Trigger
 
 Trigger Type: NFC
 
 Tag Example Name: Gaming Tag
-
+ 
 Requires: Shortcut Automations enabled in iOS
 
 This allows hands-free activation without opening the Shortcuts app.
 
-🔹 Shortcut Actions (Step-by-Step)
+## 🔹 Shortcut Actions (Step-by-Step)
 
 Open Shortcuts
 
@@ -72,13 +72,13 @@ Toggle OFF Ask Before Running (recommended)
 
 Tap Done
 
-🔹 Expected Behavior
+## 🔹 Expected Behavior
 Step	Device	Behavior
 Tap NFC tag	iPhone	Shortcut fires
 Shortcut sends POST	Pi	Node-RED receives /trigger/gaming
 Pi forwards request	PC	Node-RED calls /pc/gaming
 PC executes script	Windows	Steam + Discord launch
-🔹 Exporting the Shortcut (for repo upload)
+## 🔹 Exporting the Shortcut (for repo upload)
 
 Open Shortcuts → Shortcuts tab
 
@@ -100,7 +100,7 @@ shortcuts/Gaming Tag.shortcut
 This .shortcut file contains the actual automation logic.
 This .md file documents how it works.
 
-🔹 Future Enhancements
+## 🔹 Future Enhancements
 
 Send payload JSON (e.g. { "mode": "gaming" })
 
